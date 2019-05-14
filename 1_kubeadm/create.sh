@@ -23,6 +23,8 @@ $SSH "$USER@$MASTER" -- sh /tmp/resource/init.sh
 echo "Join nodes"
 echo "----------"
 # TODO test '-ttl' option
-JOIN_CMD=$($SSH "$USER@$MASTER" -- 'sudo kubeadm token create --print-join-command')
+$SSH "$USER@$MASTER" -- 'sudo kubeadm token create --print-join-command' > /tmp/join.sh
+parallel --tag -- $SCP --recurse "/tmp/join.sh" $USER@{}:/tmp ::: $NODES
+JOIN_CMD=$(cat /tmp/join.sh)
 echo "Join command: $JOIN_CMD"
-parallel -vvv --tag -- "$SSH $USER@{} -- sudo '$JOIN_CMD'" ::: $NODES
+parallel -vvv --tag -- "$SSH $USER@{} -- sudo 'echo /tmp/join.sh'" ::: $NODES
