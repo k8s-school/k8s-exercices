@@ -27,4 +27,4 @@ $SSH "$USER@$MASTER" -- 'sudo kubeadm token create --print-join-command' > /tmp/
 parallel --tag -- $SCP --recurse "/tmp/join.sh" $USER@{}:/tmp ::: $NODES
 JOIN_CMD=$(cat /tmp/join.sh)
 echo "Join command: $JOIN_CMD"
-parallel -vvv --tag -- "$SSH $USER@{} -- sudo 'echo /tmp/join.sh'" ::: $NODES
+parallel -vvv --tag -- "$SSH $USER@{} -- sudo 'sh /tmp/join.sh'" ::: $NODES
