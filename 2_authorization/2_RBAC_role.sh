@@ -40,11 +40,12 @@ do
     echo "Waiting for microbot svc"
     sleep 2
 done
-
 # Set the namespace preference to 'foo'
 # so that all kubectl command are ran in ns 'foo' by default
+kubectl config set-context $(kubectl config current-context) --namespace=foo
 
 # Create pod using image 'luksa/kubectl-proxy', and named 'shell' in ns 'foo'
+kubectl run --generator=run-pod/v1 shell --image=luksa/kubectl-proxy -n foo
 
 # Wait for foo:shell to be in running state
 while true
@@ -59,6 +60,7 @@ done
 # Check RBAC is enabled:
 # inside foo:shell, curl k8s api server 
 # at URL <API_SERVER>:<PORT>/api/v1/namespaces/foo/services
+kubectl exec -it -n foo shell curl localhost:8001/api/v1/namespaces/foo/services
 
 # Study and create role manifest/service-reader.yaml in ns 'foo'
 
