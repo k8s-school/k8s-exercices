@@ -1,6 +1,8 @@
 #!/bin/sh
 
 # Create an up and running k8s cluster
+# See
+# https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/
 
 set -e
 
