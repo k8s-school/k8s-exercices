@@ -25,8 +25,7 @@ $SSH "$USER@$MASTER" -- sh /tmp/resource/init.sh
 echo "Join nodes"
 echo "----------"
 # TODO test '-ttl' option
-JOIN_CMD=$($SSH "$USER@$MASTER" -- 'sudo kubeadm token create
---print-join-command')
+JOIN_CMD=$($SSH "$USER@$MASTER" -- 'sudo kubeadm token create --print-join-command')
 # Remove trailing carriage return
 JOIN_CMD=$(echo "$JOIN_CMD" | grep 'kubeadm' | sed -e 's/[\r\n]//g')
 echo "Join command: $JOIN_CMD"
