@@ -25,8 +25,10 @@ $SSH "$USER@$MASTER" -- sh /tmp/resource/init.sh
 echo "Join nodes"
 echo "----------"
 # TODO test '-ttl' option
-$SSH "$USER@$MASTER" -- 'sudo kubeadm token create --print-join-command' > /tmp/join.sh
-parallel --tag -- $SCP --recurse "/tmp/join.sh" $USER@{}:/tmp ::: $NODES
-JOIN_CMD=$(cat /tmp/join.sh)
+JOIN_CMD=$($SSH "$USER@$MASTER" -- 'sudo kubeadm token create
+--print-join-command')
+# Remove trailing carriage return
+JOIN_CMD=$(echo "$JOIN_CMD" | grep 'kubeadm' | sed -e 's/[\r\n]//g')
 echo "Join command: $JOIN_CMD"
-parallel -vvv --tag -- "$SSH $USER@{} -- sudo 'sh /tmp/join.sh'" ::: $NODES
+parallel -vvv --tag -- "$SSH $USER@{} -- sudo '$JOIN_CMD'" ::: $NODES
+
