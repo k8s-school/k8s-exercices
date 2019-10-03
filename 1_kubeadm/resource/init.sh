@@ -65,7 +65,7 @@ echo 'source <(kubectl completion bash)' >> ~/.bashrc
 
 kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
 
-kubectl wait --for=condition=ready --timeout=-1s nodes clus0-0
+kubectl wait --for=condition=ready --timeout=-1s nodes "$(hostname)"
 
 # Update kubeconfig with users alice and bob
 USER=alice
